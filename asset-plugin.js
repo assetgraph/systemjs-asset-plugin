@@ -22,7 +22,7 @@ exports.translate = function(load, traceOpts) {
   // load.metadata.timestamp = -1;
 
   if (load.address.indexOf('*') == -1)
-    return 'module.exports = GETSTATICURL("' + makeRootRelative(load.address) + '");';
+    return 'module.exports = "' + makeRootRelative(load.address) + '" /* @url */;';
 
   var isWin = process.platform.match(/^win/);
   function fromFileURL(url) {
@@ -67,7 +67,8 @@ exports.translate = function(load, traceOpts) {
         });
       });
 
-      // custom serializer into GETSTATICURL object form
+      // custom serializer into object form with /* @url */ annotations
+      // that are picked up by AssetGraph
       var objStr = '';
       function serialize(obj, ws) {
         var objStr = '{';
@@ -77,7 +78,7 @@ exports.translate = function(load, traceOpts) {
         keys.forEach(function(key, index) {
           objStr += ws + '"' + key + '": ';
           if (typeof obj[key] == 'string')
-            objStr += 'GETSTATICURL("' + obj[key] + '")';
+            objStr += '"' + obj[key] + '" /* @url */';
           else
             objStr += serialize(obj[key]);
           if (index != keys.length - 1)
