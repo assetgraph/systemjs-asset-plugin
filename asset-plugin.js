@@ -108,7 +108,7 @@ exports.instantiate = function(load) {
   return function() {
     var args = arguments;
     var i = 0;
-    return load.address.replace(/\*\*|\*/g, function(star) {
+    return load.address.replace(/\*\*\/\*|\*\*|\*/g, function(star) {
       return args[i++];
     });
   };
