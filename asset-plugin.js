@@ -16,8 +16,10 @@ exports.translate = function(load, traceOpts) {
     return fileUrl;
   }
 
-  if (!this.builder || !traceOpts.production)
+  if (!this.builder || !traceOpts.production) {
+    load.metadata.build = false;
     return load.source;
+  }
 
   // load.metadata.timestamp = -1;
 
