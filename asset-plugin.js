@@ -6,6 +6,8 @@ exports.fetch = function(load) {
     return 'module.exports = "' + load.address + '";';
   else
     return '';
+
+  load.metadata.format = 'defined';
 };
 
 exports.translate = function(load, traceOpts) {
@@ -16,8 +18,17 @@ exports.translate = function(load, traceOpts) {
     return fileUrl;
   }
 
-  if (!this.builder || !traceOpts.production)
-    return load.source;
+  if (!this.builder || !traceOpts.production) {
+    return 'if (load.address.indexOf(\'*\') == -1)\n' +
+      'return load.address;\n' +
+      'return function() {\n' + 
+      'var args = arguments;\n' +
+      'var i = 0;\n' +
+      'return load.address.replace(/\*\*\/\*|\*\*|\*/g, function(star) {\n' +
+      '  return args[i++];\n' +
+      '});\n' +
+    '};';
+  }
 
   // load.metadata.timestamp = -1;
 
@@ -99,17 +110,4 @@ exports.translate = function(load, traceOpts) {
       );
     });
   });
-};
-
-exports.instantiate = function(load) {
-  if (load.address.indexOf('*') == -1)
-    return load.address;
-
-  return function() {
-    var args = arguments;
-    var i = 0;
-    return load.address.replace(/\*\*\/\*|\*\*|\*/g, function(star) {
-      return args[i++];
-    });
-  };
 };
