@@ -6,8 +6,6 @@ exports.fetch = function(load) {
     return 'module.exports = "' + load.address + '";';
   else
     return '';
-
-  load.metadata.format = 'defined';
 };
 
 exports.translate = function(load, traceOpts) {
@@ -19,12 +17,12 @@ exports.translate = function(load, traceOpts) {
   }
 
   if (!this.builder || !traceOpts.production) {
-    return 'if (load.address.indexOf(\'*\') == -1)\n' +
-      'return load.address;\n' +
-      'return function() {\n' + 
+    return 'if (module.id.indexOf(\'*\') == -1)\n' +
+      '  module.exports = module.id;\n' +
+      'module.exports = function() {\n' + 
       'var args = arguments;\n' +
       'var i = 0;\n' +
-      'return load.address.replace(/\*\*\/\*|\*\*|\*/g, function(star) {\n' +
+      'return module.id.replace(/\*\*\/\*|\*\*|\*/g, function(star) {\n' +
       '  return args[i++];\n' +
       '});\n' +
     '};';
