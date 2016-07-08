@@ -22,7 +22,7 @@ exports.translate = function(load, traceOpts) {
       'module.exports = function() {\n' + 
       'var args = arguments;\n' +
       'var i = 0;\n' +
-      'return module.id.replace(/\*\*\/\*|\*\*|\*/g, function(star) {\n' +
+      'return module.id.replace(/\\*\\*\\/\\*|\\*\\*|\\*/g, function(star) {\n' +
       '  return args[i++];\n' +
       '});\n' +
     '};';
