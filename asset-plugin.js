@@ -37,6 +37,12 @@ exports.translate = function(load, traceOpts) {
   // assume normalized is a URL that can glob the filesystem
   return new Promise(function(resolve, reject) {
     var pathPattern = fromFileURL(load.address);
+    var queryString = '';
+    pathPattern = pathPattern.replace(/\?.*$/, function ($0) {
+        queryString = $0;
+        return '';
+    });
+
     System._nodeRequire('glob')(pathPattern, {
       nobrace: true,
       noext: true,
@@ -63,7 +69,7 @@ exports.translate = function(load, traceOpts) {
 
         segments.forEach(function(segment, index) {
           if (index == segments.length - 1)
-            curObj[segment] = makeRootRelative(toFileURL(file));
+            curObj[segment] = makeRootRelative(toFileURL(file) + queryString);
           else
             curObj = curObj[segment] = curObj[segment] || {};
         });
