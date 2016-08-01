@@ -1,6 +1,6 @@
 {
   "name": "systemjs-asset-plugin",
-  "version": "2.1.0",
+  "version": "3.0.0",
   "description": "GETSTATICURL replacement as a system.js plugin",
   "main": "asset-plugin.js",
   "scripts": {
